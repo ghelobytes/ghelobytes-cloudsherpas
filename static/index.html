@@ -1,0 +1,29 @@
+<!doctype html>
+<html ng-app="myApp">
+  <script src="js/angular.min.js"></script>
+  <script type="text/javascript">
+    var myApp = angular.module('myApp', []);
+
+    myApp.controller('myController', function ($scope) {
+      $scope.objects = [
+        {first: "1", second: "2", third: "3"},
+        {first: "11", second: "22", third: "33"},
+        {first: "111", second: "222", third: "333"},
+      ];
+    });
+  </script>
+
+  <table ng-controller="myController">
+    <tr ng-repeat="ob in objects">
+      <td>
+        <input type="text" ng-model="ob.first" />
+      </td>
+      <td>
+        <input type="text" ng-model="ob.second" />
+      </td>
+      <td>
+        <input type="text" ng-model="ob.third" />
+      </td>
+    </tr>
+  </table>
+</html>

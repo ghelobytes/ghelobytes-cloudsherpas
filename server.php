@@ -22,43 +22,49 @@ require 'Slim/Slim.php';
 $app = new \Slim\Slim();
 
 
-// get tweets
-$app->get('/tweets/:handle', function($handle) use($app) {
-	$data = getTweets($handle, 10);
+// make sure things work
+$app->get('/api/test/', function() use($app){
+	$data = array(
+		"now" => (new \DateTime())->format('Y-m-d H:i:s'),
+		"php_version" => phpversion()
+	);
 	echo toJSON($app, $data);
 });
 
 
-
-// make sure things work
-$app->get('/test/', function() use($app){
-	$data = array(
-		"name" => 2,
-		"phone" => array(
-			"work" 	 => "8842853",
-			"mobile" => "09471988697"
-		)
-	);
+// get tweets
+$app->get('/api/tweets/:screen_name/:count', function($screen_name, $count) use($app) {
+	$data = getTweets($screen_name, $count);
 	echo toJSON($app, $data);
 });
 
 
 
 // start listening for request
-//$app->run();
+$app->run();
 
-header('Content-Type: application/json');
-echo getTweets('ghelobytes',10);
+
+
+
+
+
+
+
+
+// ================================================================= //
+
 
 
 function toJSON($app, $content){
-	$response = $app->response;
-    $response['Content-Type'] = 'application/json';
-    $response->body( json_encode($content) );
+	$r = $app->response;
+    $r['Content-Type'] = 'application/json';
+    $r->body( json_encode($content) );
 };
 
 
 // seen from: http://stackoverflow.com/questions/20733963/using-oauth2-in-php-for-accessing-twitter-moving-it-to-google-app-engine
+// wasted hours on "grant_type=client_credentials" line on 2nd phase of authorization (bearer)
+// good thing I checked https://dev.twitter.com/oauth/application-only
 function getTweets($screen_name, $count){
 	global $config;
 
@@ -78,13 +84,13 @@ function getTweets($screen_name, $count){
 	$context = stream_context_create(array(
 		'http' => array(
 			'method'  => 'GET',
-			'header'  => "Authorization: Bearer " . $bearerToken . "\r\n".
-						 "\r\n".
-						 "grant_type=client_credentials",
+			'header'  => "Authorization: Bearer " . $bearerToken
+						 //"\r\n".
+						 //"grant_type=client_credentials",
 		),
 	));
 
 	$encodedData = file_get_contents('https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name='."$screen_name".'&count='."$count", false, $context);
-	return $encodedData;
+	return json_decode($encodedData);
 };
 

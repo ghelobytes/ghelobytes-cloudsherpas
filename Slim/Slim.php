@@ -188,6 +188,7 @@ class Slim
         $this->container->singleton('logWriter', function ($c) {
             $logWriter = $c['settings']['log.writer'];
 
+			return NULL;
             return is_object($logWriter) ? $logWriter : new \Slim\LogWriter($c['environment']['slim.errors']);
         });
 
