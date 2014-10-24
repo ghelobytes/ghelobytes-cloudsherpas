@@ -1,29 +1,91 @@
 <!doctype html>
-<html ng-app="myApp">
-  <script src="js/angular.min.js"></script>
-  <script type="text/javascript">
-    var myApp = angular.module('myApp', []);
+<html ng-app="tweetApp">
+	<head>
+		<script src="lib/angular/angular.js"></script>
+		<script src="lib/angular/angular-resource.js"></script>
+		<script src="lib/angular/ui-bootstrap-tpls-0.11.2.min.js"></script>
+		<link rel="stylesheet" href="lib/angular/bootstrap.min.css" />
+		
+		<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+		
+		<script src="app.js"></script>
+		
+		<style>
+			hr.soften {
+			  height: 1px;
+			  background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.8), rgba(0,0,0,0));
+			  background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.8), rgba(0,0,0,0));
+			  background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.8), rgba(0,0,0,0));
+			  background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.8), rgba(0,0,0,0));
+			  border: 0;
+			}
+		</style>
+		
+	</head>
+	
+	<body onload="initMap();">
 
-    myApp.controller('myController', function ($scope) {
-      $scope.objects = [
-        {first: "1", second: "2", third: "3"},
-        {first: "11", second: "22", third: "33"},
-        {first: "111", second: "222", third: "333"},
-      ];
-    });
-  </script>
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<h1 class="text-center text-info">
+						Tweet GeoFinder
+					</h1>
+					<h4 class="text-center">
+						Click on the map to search for tweets within 1 kilometer radius
+					</h4>
+					<h5 class="text-center">
+						(Cloudsherpa coding exam by <a href="https://twitter.com/ghelobytes" target="_blank">@ghelobytes</a>; Full source at <a href="https://github.com/ghelobytes/ghelobytes-cloudsherpas" target="_blank">Github</a>)
+					</h5>
+				</div>
+			</div>
+			<div class="row clearfix">
+				<div class="col-md-6 column">
+					<div id="map" style="width: 550px; height: 400px"></div>
+				</div>
+				<div class="col-md-6 column" id="tweets" ng-controller="tweetController">
+				
+					<div class="btn-group pull-right">
+						<label class="btn btn-primary" ng-click="predicate='created_at';reverse=false" ng-model="radioModel" btn-radio="'Date'">Date</label>
+						<label class="btn btn-primary" ng-click="predicate='twitter_name';reverse=false" ng-model="radioModel" btn-radio="'Name'">Name</label>
+					</div>
+					<br/><br/>
+				
+					<div class="row clearfix" ng-repeat="tweet in tweets | orderBy:predicate:reverse">
+						<div class="col-md-2 column">
+							<img ng-src="{{tweet.user.profile_image_url}}" />
+						</div>
+						<div class="col-md-10 column">
+							@{{tweet.user.screen_name}} on {{tweet.created_at_str}} <br/> {{tweet.text}}
+							<br/>
+							<hr class="soften"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			
+		<!---
+		<div id="map" style="width: 600px; height: 400px"></div>
+		<div id="tweets" ng-controller="tweetController">
+			
+			<ul>
+				<li ng-repeat="tweet in tweets"><img ng-src="{{tweet.user.profile_image_url}}" /> {{tweet.user.screen_name}} on {{tweet.created_at}} : {{tweet.text}}</li>
+			</ul>
 
-  <table ng-controller="myController">
-    <tr ng-repeat="ob in objects">
-      <td>
-        <input type="text" ng-model="ob.first" />
-      </td>
-      <td>
-        <input type="text" ng-model="ob.second" />
-      </td>
-      <td>
-        <input type="text" ng-model="ob.third" />
-      </td>
-    </tr>
-  </table>
+		</div>
+		--->
+	</body>
+  
 </html>
+
+
+<!---
+	statuses[0] .text
+				.created_at
+				.geo.coordinates[0]	lat
+				.geo.coordinates[1]	lng
+				.user.screen_name
+				.user.profile_image_url
+--->

@@ -3,11 +3,19 @@ ghelobytes-cloudsherpas
 
 An app for cloudsherpas coding exam
 
-## Test
+### Tools
+- PHP
+- Slimframework
+- AngularJS
+- Twitter Bootstrap (css)
+- LeafletJS
+
+
+### Test
     dev_appserver.py c:\users\ghelo\desktop\cloudsherpas\ghelobytes-cloudsherpas
 
-## Authenticate (before deployment)
+### Authenticate (before deployment)
     gcloud auth login
 	
-## Deploy
+### Deploy
     appcfg.py update c:\users\ghelo\desktop\cloudsherpas\ghelobytes-cloudsherpas
