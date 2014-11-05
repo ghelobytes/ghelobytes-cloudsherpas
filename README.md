@@ -2,6 +2,7 @@ Tweet GeoFinder
 ================================
 
 An app for Cloudsherpas coding exam. Geolocate tweets within 1 kilometer of desired location in the map.
+Live demo at [http://ghelobytes-cloudsherpas.appspot.com/](http://ghelobytes-cloudsherpas.appspot.com/).
 
 ### Tools
 - PHP
